@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:netflix_tutorial/screen/detail_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../model/model_movie.dart';
 class CarouselImage extends StatefulWidget {
@@ -34,7 +35,7 @@ class _CarouselImageState extends State<CarouselImage>{
     //  CarouselImage 상위 satefullwidget class에서 가져온 영화들movies 을 참조함
     // 각 속성 영화제목 분류 등에 값을 넣어줌
     movies = widget.movies;
-    images = movies.map((m) => Image.asset('images/' + m.poster)).toList();
+    images = movies.map((m) => Image.network(m.poster)).toList();
     keywords = movies.map((m) => m.keyword).toList();
     likes = movies.map((m) => m.like).toList();
     _currentKeyword = keywords[0];
@@ -89,11 +90,23 @@ class _CarouselImageState extends State<CarouselImage>{
                       likes[_currentPage]
                           ? IconButton(
                         icon: Icon(Icons.check),
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            likes[_currentPage] = !likes[_currentPage];
+                            movies[_currentPage].reference.update( //updateData >> update로 수정하면됨
+                                {'like': likes[_currentPage]});
+                          });
+                        },
                       )
                           : IconButton(
                         icon: Icon(Icons.add),
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            likes[_currentPage] = !likes[_currentPage];
+                            movies[_currentPage].reference.update(
+                                {'like': likes[_currentPage]});
+                          });
+                        },
                       ),
                       Text(
                         '내가 찜한 콘텐츠',

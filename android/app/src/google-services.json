@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1009167558389",
+    "project_id": "netflix-clone-tutorial-e0e9a",
+    "storage_bucket": "netflix-clone-tutorial-e0e9a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1009167558389:android:f6cd78ae782044135787bc",
+        "android_client_info": {
+          "package_name": "com.example.netflix_tutorial"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1009167558389-pfjvjre2edh4rbqkr2bs8lf4qb9d00es.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZMl4N-VJDzKwcTTqAKcyPVPNo3KOS4NU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1009167558389-pfjvjre2edh4rbqkr2bs8lf4qb9d00es.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -3,6 +3,8 @@ import 'package:netflix_tutorial/model/model_movie.dart';
 import 'package:netflix_tutorial/widget/box_slider.dart';
 import 'package:netflix_tutorial/widget/carousel_slider.dart';
 import 'package:netflix_tutorial/widget/circle_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 // 넷플릭스의 홈화면 제작
 class HomeScreen extends StatefulWidget{
   // 강의에서 영화의 데이터를 백엔드에서 가져와야하기에 라고 이야기
@@ -11,54 +13,48 @@ class HomeScreen extends StatefulWidget{
   // _HomeScreen 타입의
 }
 class _HomeScreenState extends State<HomeScreen> {
-  List<Movie> movies = [
-    Movie.fromMap({
-      'title': '재와 환상의 그림갈',
-      'keyword': '애니/판타지/이세계',
-      'poster': 'home_movie.jpg', // images/ 가 들어가야 정확한 경로로 인식되어 앱에서 제대로 인식한다
-      'like': false
-      //'영상쓰' :
-    }),
-    Movie.fromMap({
-      'title': '재와 환상의 그림갈',
-      'keyword': '애니/판타지/이세계',
-      'poster': 'home_movie.jpg',
-      'like': false
-    }),
-    Movie.fromMap({
-      'title': '재와 환상의 그림갈',
-      'keyword': '애니/판타지/이세계',
-      'poster': 'home_movie.jpg',
-      'like': false
-    }),
-    Movie.fromMap({
-      'title': '재와 환상의 그림갈',
-      'keyword': '애니/판타지/이세계',
-      'poster': 'home_movie.jpg',
-      'like': false
-    })
-  ];
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  late Stream<QuerySnapshot> streamData;
+
   @override
   void initState(){
     super.initState();
+    streamData = firestore.collection('movie').snapshots(); // snapshots()는 실시간으로 변경되는 DB의 데이터를 반영해서 읽어옴]
+    // 가령 찜하기를 누르면 DB의 like가 false에서 true로 바뀌는 데 바뀌는 실시간으로 업데이트함
+    //만약 안바뀐느 데이터를 읽어오고 싶으면 스냅샷이 아닌 get()을 쓴다
+  }
+
+  Widget _fetchData(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('movie').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return LinearProgressIndicator();
+        return _buildBody(context, snapshot.data!.docs); //        return _buildBody(context, snapshot.data!.documents); >>
+      },
+    );
+  }
+  Widget _buildBody(BuildContext context, List<DocumentSnapshot> snapshot) {
+    List<Movie> movies = snapshot.map((d) => Movie.fromSnapshot(d)).toList();
+    return ListView(
+      children: <Widget>[
+        Stack(
+          children: <Widget>[
+            CarouselImage(movies: movies),
+            TopBar(),
+          ],
+        ),
+        CircleSlider(movies: movies),
+        BoxSlider(movies: movies),
+      ],
+    );
   }
 
   @override
-  Widget build (BuildContext context){ //위젯들을 화면에 띄움
-    return ListView(children: <Widget>[
-      Stack(
-        children: <Widget>[
-          CarouselImage(movies: movies,),
-          TopBar(),
-        ],
-      ),
-      CircleSlider(movies: movies,),
-      BoxSlider(movies: movies),
-    ],
-    );
-    //return TopBar();
+  Widget build(BuildContext context) {
+    return _fetchData(context);
   }
 }
+
 /*
 class TopBar extends StatelessWidget{ // 탑 바는 홈화면에만 있기에 홈화면을 주관하는 이 파일에 탑바 만듬
   @override

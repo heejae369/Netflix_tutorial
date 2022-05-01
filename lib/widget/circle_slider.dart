@@ -50,7 +50,7 @@ List<Widget> makeCircleImages(BuildContext context, List<Movie> movies) {
           child: Align(
             alignment: Alignment.centerLeft,
             child: CircleAvatar(
-              backgroundImage: AssetImage('images/' + movies[i].poster), //movies의 현재 순서 영화의 사진을 가져와서 배경사진으로 설정
+              backgroundImage: NetworkImage(movies[i].poster), //movies의 현재 순서 영화의 사진을 가져와서 배경사진으로 설정
               radius: 48,
             ),
           ),

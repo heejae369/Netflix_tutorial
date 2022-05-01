@@ -1,9 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:netflix_tutorial/screen/home_screen.dart';
 import 'package:netflix_tutorial/screen/more_screen.dart';
 import 'package:netflix_tutorial/widget/bottom_bar.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -11,8 +14,6 @@ void main() {
 class MyApp extends StatefulWidget{
   // StatefulWidget 동적인 변화 가능한 위젯, UI가 실시간으로 바뀜
   _MyAppState createState() => _MyAppState();
-
-
 }
 
 class _MyAppState extends State<MyApp>{
